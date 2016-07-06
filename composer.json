@@ -1,0 +1,47 @@
+{
+    "name": "somnambulist/laravel-doctrine-entity-audit",
+    "type": "library",
+    "description": "A port of the SimpleThings EntityAudit package re-worked for Laravel 5+",
+    "keywords": [
+        "doctrine",
+        "laravel",
+        "laravel-doctrine",
+        "entity",
+        "audit",
+        "auditing"
+    ],
+    "minimum-stability": "dev",
+    "license": "LGPL-2.1",
+    "authors": [
+        {
+            "name": "Benjamin Eberlei",
+            "email": "eberlei@simplethings.de"
+        },
+        {
+            "name": "Dave Redfern",
+            "email": "dave@scorpioframework.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Somnambulist\\EntityAudit\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Somnambulist\\EntityAudit\\Tests\\": "tests/Somnambulist/Tests/EntityAudit"
+        }
+    },
+    "require": {
+        "php": ">=5.5.9",
+        "laravel-doctrine/orm": "1.*",
+        "somnambulist/laravel-doctrine-behaviours": "0.2.*",
+        "nesbot/carbon": "~1.19"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.8.20",
+        "symfony/var-dumper": "^2.7"
+    },
+    "suggest": {
+    }
+}

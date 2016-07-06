@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="./tests/bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="Somnambulist EntityAudit for Laravel-Doctrine">
+            <directory suffix="Test.php">./tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./src</directory>
+            <exclude>
+                <directory>./src/Somnambulist/EntityAudit/Resources</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <php>
+        <var name="DOCTRINE_DRIVER" value="pdo_sqlite"/>
+        <var name="DOCTRINE_MEMORY" value="1"/>
+        <var name="DOCTRINE_DATABASE" value=""/>
+        <var name="DOCTRINE_USER" value=""/>
+        <var name="DOCTRINE_PASSWORD" value=""/>
+        <var name="DOCTRINE_HOST" value=""/>
+        <!--<var name="DOCTRINE_PATH" value="./db.sqlite"/>-->
+    </php>
+</phpunit>
