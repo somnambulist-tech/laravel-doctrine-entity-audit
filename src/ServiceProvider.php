@@ -19,6 +19,7 @@
 namespace Somnambulist\EntityAudit;
 
 use Doctrine\ORM\EntityManager;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Somnambulist\EntityAudit\EventListener\CreateSchemaListener;
@@ -87,7 +88,7 @@ class ServiceProvider extends BaseServiceProvider
         $this->app->singleton(AuditConfiguration::class, function ($app) use ($config) {
             $auditConfig = new AuditConfiguration(
                 new UserResolver(
-                    $app['guard'],
+                    $app[Guard::class],
                     $config->get('entity_audit.username_for.unknown_authenticated_user'),
                     $config->get('entity_audit.username_for.unknown_unauthenticated_user')
                 )
