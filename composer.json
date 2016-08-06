@@ -10,7 +10,6 @@
         "audit",
         "auditing"
     ],
-    "minimum-stability": "dev",
     "license": "LGPL-2.1",
     "authors": [
         {
