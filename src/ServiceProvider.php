@@ -22,9 +22,11 @@ use Doctrine\ORM\EntityManager;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use LaravelDoctrine\ORM\IlluminateRegistry;
 use Somnambulist\EntityAudit\EventListener\CreateSchemaListener;
 use Somnambulist\EntityAudit\EventListener\LogRevisionsListener;
 use Somnambulist\EntityAudit\Metadata\MetadataFactory;
+use Somnambulist\EntityAudit\Support\TableConfiguration;
 
 /**
  * Class ServiceProvider
@@ -59,7 +61,7 @@ class ServiceProvider extends BaseServiceProvider
         $config = $this->app->make('config');
 
         $this->registerCoreServices($config);
-        $this->registerDoctrineEventListeners($config);
+        $this->registerEntityAuditConfigurations($config);
     }
 
 
@@ -81,63 +83,53 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function registerCoreServices(Repository $config)
     {
-        $this->app->singleton(MetadataFactory::class, function ($app) use ($config) {
-            return new MetadataFactory($config->get('entity_audit.audited_entities', []));
+        $this->app->singleton(AuditRegistry::class, function () {
+            return new AuditRegistry();
         });
-
-        $this->app->singleton(AuditConfiguration::class, function ($app) use ($config) {
-            $auditConfig = new AuditConfiguration(
-                new UserResolver(
-                    $app[Guard::class],
-                    $config->get('entity_audit.username_for.unknown_authenticated_user'),
-                    $config->get('entity_audit.username_for.unknown_unauthenticated_user')
-                )
-            );
-            $auditConfig
-                ->setAuditedEntityClasses($config->get('entity_audit.audited_entities', []))
-                ->setGlobalIgnoreColumns($config->get('entity_audit.global_ignore_columns', []))
-                ->setRevisionFieldName($config->get('entity_audit.revision_field_name', 'rev'))
-                ->setRevisionTableName($config->get('entity_audit.revision_table_name', 'revisions'))
-                ->setRevisionIdFieldType($config->get('entity_audit.revision_id_field_type', 'integer'))
-                ->setRevisionTypeFieldName($config->get('entity_audit.revision_type_field_name', 'revtype'))
-                ->setTablePrefix($config->get('entity_audit.table_prefix', ''))
-                ->setTableSuffix($config->get('entity_audit.table_suffix', '_audit'))
-            ;
-
-            return $auditConfig;
-        });
-
-        $this->app->singleton(AuditReader::class, function ($app) {
-            return new AuditReader($app['em'], $app[AuditConfiguration::class], $app[MetadataFactory::class]);
-        });
-
-        $this->app->singleton(AuditManager::class, function ($app) {
-            return new AuditManager(
-                $app[AuditConfiguration::class],
-                $app[MetadataFactory::class],
-                $app[AuditReader::class]
-            );
-        });
-
-        $this->app->alias(AuditConfiguration::class, 'entity_audit.config');
-        $this->app->alias(AuditManager::class,       'entity_audit.manager');
-        $this->app->alias(AuditReader::class,        'entity_audit.reader');
-        $this->app->alias(MetadataFactory::class,    'entity_audit.meta_data');
+        $this->app->alias('entity_audit.registry', AuditRegistry::class);
     }
 
     /**
-     * Registers the additional event listeners that will generate revisions
+     * Registers auditing to the specified entity managers
      *
      * @param Repository $config
+     *
+     * @return void
      */
-    protected function registerDoctrineEventListeners(Repository $config)
+    protected function registerEntityAuditConfigurations(Repository $config)
     {
-        $this->app->afterResolving('em', function ($em) {
-            $am = $this->app->make(AuditManager::class);
+        $this->app->afterResolving(IlluminateRegistry::class, function ($registry) use ($config) {
+            $table         = $config->get('entity_audit.global.table');
+            $users         = $config->get('entity_audit.global.username_for');
+            $columns       = $config->get('entity_audit.global.ignore_columns');
+            $auditRegistry = $this->app->make(AuditRegistry::class);
 
-            /** @var EntityManager $em */
-            $em->getEventManager()->addEventSubscriber(new CreateSchemaListener($am));
-            $em->getEventManager()->addEventSubscriber(new LogRevisionsListener($am));
+            foreach ($config->get('entity_audit.entity_managers', []) as $emName => $emConfig) {
+                $users       = array_merge($users, data_get($emConfig, 'username_for', []));
+                $metadata    = new MetadataFactory(data_get($emConfig, 'audited_entities', []));
+                $auditConfig = new AuditConfiguration(
+                    new UserResolver(
+                        $this->app->make(Guard::class),
+                        $users['unknown_authenticated_user'],
+                        $users['unknown_unauthenticated_user']
+                    ),
+                    new TableConfiguration(array_merge($table, data_get($emConfig, 'table', []))),
+                    data_get($emConfig, 'ignore_columns', $columns)
+                );
+                /** @var IlluminateRegistry $registry */
+                /** @var EntityManager $em */
+                $em      = $registry->getManager($emName);
+                $reader  = new AuditReader($em, $auditConfig, $metadata);
+                $manager = new AuditManager($auditConfig, $metadata, $reader);
+
+                $em->getEventManager()->addEventSubscriber(new CreateSchemaListener($manager));
+                $em->getEventManager()->addEventSubscriber(new LogRevisionsListener($manager));
+
+                $auditRegistry->add($emName, $manager);
+
+                $this->app->alias(sprintf('entity_audit.%s.manager', $emName), $manager);
+                $this->app->alias(sprintf('entity_audit.%s.reader', $emName), $reader);
+            }
         });
     }
 
@@ -155,10 +147,7 @@ class ServiceProvider extends BaseServiceProvider
     public function provides()
     {
         return [
-            'entity_audit.config',
-            'entity_audit.manager',
-            'entity_audit.meta_data',
-            'entity_audit.reader',
+            'entity_audit.registry',
         ];
     }
 }

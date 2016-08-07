@@ -30,7 +30,24 @@ namespace Somnambulist\EntityAudit\Exception;
  * @package    Somnambulist\EntityAudit\Exception
  * @subpackage Somnambulist\EntityAudit\Exception\AuditedCollectionException
  */
-class AuditedCollectionException extends AuditException
+class AuditedCollectionException extends \Exception
 {
-    
+
+    /**
+     * @return static
+     */
+    public static function collectionIsReadOnly()
+    {
+        return new static('The AuditCollection is read-only');
+    }
+
+    /**
+     * @param string $offset
+     *
+     * @return static
+     */
+    public static function offsetIsNotDefined($offset)
+    {
+        return new static(sprintf('Offset "%s" is not defined', $offset));
+    }
 }
