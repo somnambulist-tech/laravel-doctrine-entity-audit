@@ -34,7 +34,7 @@
     "require": {
         "php": ">=5.5.9",
         "laravel-doctrine/orm": "1.*",
-        "somnambulist/laravel-doctrine-behaviours": "0.4.*",
+        "somnambulist/laravel-doctrine-behaviours": "0.5.*",
         "nesbot/carbon": "~1.19"
     },
     "require-dev": {
