@@ -86,7 +86,7 @@ class ServiceProvider extends BaseServiceProvider
         $this->app->singleton(AuditRegistry::class, function () {
             return new AuditRegistry();
         });
-        $this->app->alias('entity_audit.registry', AuditRegistry::class);
+        $this->app->alias(AuditRegistry::class, 'entity_audit.registry');
     }
 
     /**
@@ -106,7 +106,7 @@ class ServiceProvider extends BaseServiceProvider
 
             foreach ($config->get('entity_audit.entity_managers', []) as $emName => $emConfig) {
                 $users       = array_merge($users, data_get($emConfig, 'username_for', []));
-                $metadata    = new MetadataFactory(data_get($emConfig, 'audited_entities', []));
+                $metadata    = new MetadataFactory(data_get($emConfig, 'entities', []));
                 $auditConfig = new AuditConfiguration(
                     new UserResolver(
                         $this->app->make(Guard::class),
@@ -127,8 +127,8 @@ class ServiceProvider extends BaseServiceProvider
 
                 $auditRegistry->add($emName, $manager);
 
-                $this->app->alias(sprintf('entity_audit.%s.manager', $emName), $manager);
-                $this->app->alias(sprintf('entity_audit.%s.reader', $emName), $reader);
+                $this->app->alias($manager, sprintf('entity_audit.%s.manager', $emName));
+                $this->app->alias($reader, sprintf('entity_audit.%s.reader', $emName));
             }
         });
     }

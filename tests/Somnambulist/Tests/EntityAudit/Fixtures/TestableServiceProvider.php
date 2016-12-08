@@ -32,6 +32,6 @@ class TestableServiceProvider extends ServiceProvider
 
     protected function getConfigPath()
     {
-        return __DIR__ . '/entity_audit.php';
+        return __DIR__ . '/config/entity_audit.php';
     }
 }
