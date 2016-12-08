@@ -37,6 +37,7 @@ use Somnambulist\EntityAudit\AuditReader;
 use Somnambulist\EntityAudit\EventListener\CreateSchemaListener;
 use Somnambulist\EntityAudit\EventListener\LogRevisionsListener;
 use Somnambulist\EntityAudit\Metadata\MetadataFactory;
+use Somnambulist\EntityAudit\Support\TableConfiguration;
 use Somnambulist\EntityAudit\UserResolver;
 
 /**
@@ -111,11 +112,15 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
         ;
 
         $auditMeta   = new MetadataFactory($this->auditedEntities);
-        $auditConfig = new AuditConfiguration(new UserResolver($guard, 'beberlei', 'beberlei'));
+        $auditConfig = new AuditConfiguration(
+            new UserResolver($guard, 'beberlei', 'beberlei'),
+            new TableConfiguration([
+                'table_suffix' => '_audit',
+                'table_prefix' => '',
+            ]),
+            ['ignoreme']
+        );
         $auditReader = new AuditReader($this->em, $auditConfig, $auditMeta);
-
-        $auditConfig->setAuditedEntityClasses($this->auditedEntities);
-        $auditConfig->setGlobalIgnoreColumns(['ignoreme']);
 
         $this->auditManager = new AuditManager($auditConfig, $auditMeta, $auditReader);
 

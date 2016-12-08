@@ -122,7 +122,7 @@ class AuditedCollection implements Collection
      */
     public function add($element)
     {
-        throw new AuditedCollectionException('The AuditedCollection is read-only');
+        throw AuditedCollectionException::collectionIsReadOnly();
     }
 
     /**
@@ -159,7 +159,7 @@ class AuditedCollection implements Collection
      */
     public function remove($key)
     {
-        throw new AuditedCollectionException('Audited collections does not support removal');
+        throw AuditedCollectionException::collectionIsReadOnly();
     }
 
     /**
@@ -167,7 +167,7 @@ class AuditedCollection implements Collection
      */
     public function removeElement($element)
     {
-        throw new AuditedCollectionException('Audited collections does not support removal');
+        throw AuditedCollectionException::collectionIsReadOnly();
     }
 
     /**
@@ -213,7 +213,7 @@ class AuditedCollection implements Collection
      */
     public function set($key, $value)
     {
-        throw new AuditedCollectionException('AuditedCollection is read-only');
+        throw AuditedCollectionException::collectionIsReadOnly();
     }
 
     /**
@@ -396,7 +396,7 @@ class AuditedCollection implements Collection
         $this->initialize();
 
         if (!isset($this->entities[$offset])) {
-            throw new AuditedCollectionException(sprintf('Offset "%s" is not defined', $offset));
+            throw AuditedCollectionException::offsetIsNotDefined($offset);
         }
 
         $entity = $this->entities[$offset];
@@ -413,7 +413,7 @@ class AuditedCollection implements Collection
      */
     public function offsetSet($offset, $value)
     {
-        throw new AuditedCollectionException('AuditedCollection is read-only');
+        throw AuditedCollectionException::collectionIsReadOnly();
     }
 
     /**
@@ -421,7 +421,7 @@ class AuditedCollection implements Collection
      */
     public function offsetUnset($offset)
     {
-        throw new AuditedCollectionException('Audited collections does not support removal');
+        throw AuditedCollectionException::collectionIsReadOnly();
     }
 
     /**
