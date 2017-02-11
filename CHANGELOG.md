@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2017-02-11
+----------
+
+Changed:
+
+ * Fixed bug with aliasing of the specific entity audit classes
+
 2017-02-03
 ----------
 

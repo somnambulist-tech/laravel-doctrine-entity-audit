@@ -127,8 +127,8 @@ class ServiceProvider extends BaseServiceProvider
 
                 $auditRegistry->add($emName, $manager);
 
-                $this->app->alias($manager, sprintf('entity_audit.%s.manager', $emName));
-                $this->app->alias($reader, sprintf('entity_audit.%s.reader', $emName));
+                $this->app->instance(sprintf('entity_audit.%s.manager', $emName), $manager);
+                $this->app->instance(sprintf('entity_audit.%s.reader', $emName), $reader);
             }
         });
     }
