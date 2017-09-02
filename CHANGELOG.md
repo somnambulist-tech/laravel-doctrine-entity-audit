@@ -1,6 +1,15 @@
 Change Log
 ==========
 
+2017-09-02
+----------
+
+Changed:
+
+ * Removed dependency on entity-behaviours as it is not needed
+ * Updated PHPUnit to v6
+ * Updated unit tests with no assertions
+
 2017-02-11
 ----------
 

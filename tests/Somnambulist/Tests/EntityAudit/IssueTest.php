@@ -24,6 +24,7 @@
 
 namespace Somnambulist\EntityAudit\Tests;
 
+use Somnambulist\EntityAudit\Exception\NoRevisionFoundException;
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\DuplicateRevisionFailureTestOwnedElement;
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\DuplicateRevisionFailureTestPrimaryOwner;
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\DuplicateRevisionFailureTestSecondaryOwner;
@@ -93,6 +94,11 @@ class IssueTest extends BaseTest
         $this->em->persist($user);
         $this->em->remove($reve);
         $this->em->flush();
+
+        $reader = $this->auditManager->getAuditReader();
+
+        $this->expectException(NoRevisionFoundException::class);
+        $reader->find(get_class($reve), $reve->getId(), 1);
     }
 
     public function testEscapedColumns()
@@ -105,7 +111,9 @@ class IssueTest extends BaseTest
 
         $reader = $this->auditManager->getAuditReader();
 
-        $reader->find(get_class($e), $e->getId(), 1);
+        $result = $reader->find(get_class($e), $e->getId(), 1);
+
+        $this->assertInstanceOf(EscapedColumnsEntity::class, $result);
     }
 
     public function testIssue87()
@@ -195,6 +203,11 @@ class IssueTest extends BaseTest
 
         $this->em->remove($primaryOwner);
         $this->em->flush();
+
+        $this->expectException(NoRevisionFoundException::class);
+
+        $reader = $this->auditManager->getAuditReader();
+        $reader->find(get_class($primaryOwner), $primaryOwner->getId(), 1);
     }
 
     public function testIssue156()
@@ -211,5 +224,7 @@ class IssueTest extends BaseTest
 
         $auditReader = $this->auditManager->getAuditReader();
         $object      = $auditReader->find(get_class($number), $number->getId(), 1);
+
+        $this->assertInstanceOf(get_class($number), $object);
     }
 }

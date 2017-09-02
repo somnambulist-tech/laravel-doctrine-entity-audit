@@ -2,9 +2,10 @@
 
 namespace Somnambulist\EntityAudit\Tests\Utils;
 
+use PHPUnit\Framework\TestCase;
 use Somnambulist\EntityAudit\Utils\SimpleDiff;
 
-class SimpleDiffTest extends \PHPUnit_Framework_TestCase
+class SimpleDiffTest extends TestCase
 {
     /**
      * @dataProvider dataDiff

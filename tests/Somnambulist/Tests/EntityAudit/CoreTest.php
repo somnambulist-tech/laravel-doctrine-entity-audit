@@ -148,7 +148,7 @@ class CoreTest extends BaseTest
     {
         $reader = $this->auditManager->getAuditReader();
 
-        $this->setExpectedException(
+        $this->expectException(
             'Somnambulist\EntityAudit\Exception\NoRevisionFoundException',
             "No revision of class 'Somnambulist\\EntityAudit\\Tests\\Fixtures\\Core\\UserAudit' (1) was found at revision 1 or before. The entity did not exist at the specified revision yet."
         );
@@ -159,7 +159,7 @@ class CoreTest extends BaseTest
     {
         $reader = $this->auditManager->getAuditReader();
 
-        $this->setExpectedException(
+        $this->expectException(
             'Somnambulist\EntityAudit\Exception\NotAuditedException',
             "Class 'stdClass' is not audited."
         );

@@ -31,6 +31,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Tools\SchemaTool;
 use Illuminate\Contracts\Auth\Guard;
+use PHPUnit\Framework\TestCase;
 use Somnambulist\EntityAudit\AuditConfiguration;
 use Somnambulist\EntityAudit\AuditManager;
 use Somnambulist\EntityAudit\AuditReader;
@@ -46,7 +47,7 @@ use Somnambulist\EntityAudit\UserResolver;
  * @package    Somnambulist\EntityAudit\Tests
  * @subpackage Somnambulist\EntityAudit\Tests\BaseTest
  */
-abstract class BaseTest extends \PHPUnit_Framework_TestCase
+abstract class BaseTest extends TestCase
 {
     /**
      * @var EntityManager

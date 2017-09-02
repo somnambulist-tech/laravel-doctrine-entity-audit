@@ -18,6 +18,7 @@
 
 namespace Somnambulist\EntityAudit\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Somnambulist\EntityAudit\AuditConfiguration;
 use Somnambulist\EntityAudit\AuditManager;
 use Somnambulist\EntityAudit\AuditReader;
@@ -31,7 +32,7 @@ use Somnambulist\EntityAudit\Metadata\MetadataFactory;
  * @subpackage Somnambulist\EntityAudit\Tests\AuditRegistryTest
  * @author     Dave Redfern
  */
-class AuditRegistryTest extends \PHPUnit_Framework_TestCase
+class AuditRegistryTest extends TestCase
 {
 
     /**
