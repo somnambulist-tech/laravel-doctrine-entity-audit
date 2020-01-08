@@ -1,0 +1,11 @@
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/.idea export-ignore
+/composer.lock export-ignore
+/tests export-ignore
+/phpunit.mysql.xml export-ignore
+/phpunit.xml export-ignore
+/phpunit.xml.dist export-ignore
+/CHANGELOG.md export-ignore
+/README.md export-ignore
+/docs export-ignore

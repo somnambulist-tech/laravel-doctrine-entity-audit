@@ -18,6 +18,7 @@
 
 namespace Somnambulist\EntityAudit\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Somnambulist\EntityAudit\AuditConfiguration;
 use Somnambulist\EntityAudit\AuditManager;
@@ -150,7 +151,7 @@ class AuditRegistryTest extends TestCase
             )
         );
 
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $registry->get('test');
     }
 }
