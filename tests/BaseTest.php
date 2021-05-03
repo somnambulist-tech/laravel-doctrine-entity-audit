@@ -69,7 +69,7 @@ abstract class BaseTest extends TestCase
      */
     protected $auditedEntities = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         $reader = new AnnotationReader();
         $driver = new AnnotationDriver($reader);
@@ -144,7 +144,7 @@ abstract class BaseTest extends TestCase
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $schemaTool = new SchemaTool($this->em);
         $em         = $this->em;

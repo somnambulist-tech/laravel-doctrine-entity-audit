@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+2021-05-03
+----------
+
+Changed:
+
+ * Updated PHPUnit version and compatibility with PHPUnit 9.5
+ * Added GitHub workflow for running tests
+
 2017-09-02
 ----------
 

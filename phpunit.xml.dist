@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit bootstrap="./tests/config/bootstrap.php" colors="true">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./tests/config/bootstrap.php" colors="true"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+    <coverage>
+        <include>
+            <directory>./src</directory>
+        </include>
+        <exclude>
+            <directory>./src/Somnambulist/EntityAudit/Resources</directory>
+        </exclude>
+    </coverage>
     <testsuites>
         <testsuite name="Somnambulist EntityAudit for Laravel-Doctrine">
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>./src</directory>
-            <exclude>
-                <directory>./src/Somnambulist/EntityAudit/Resources</directory>
-            </exclude>
-        </whitelist>
-    </filter>
-
     <php>
         <var name="DOCTRINE_DRIVER" value="pdo_sqlite"/>
         <var name="DOCTRINE_MEMORY" value="1"/>
