@@ -36,8 +36,9 @@
         "laravel-doctrine/orm": "1.*"
     },
     "require-dev": {
-        "mockery/mockery": "~0.9",
-        "phpunit/phpunit": "~9.5",
-        "symfony/var-dumper": "~5.2"
+        "laravel/framework": "^8.40",
+        "mockery/mockery": "^0.9",
+        "phpunit/phpunit": "^9.5",
+        "symfony/var-dumper": "^4.3|^5.2"
     }
 }
