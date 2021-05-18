@@ -23,6 +23,25 @@ To protect from conflicts it has been re-namespaced and some internals changed.
    * ./artisan doctrine:migrations:diff
    * ./artisan doctrine:migrations:migrate
 
+### Configuring UserResolver
+
+The UserResolver implementation may be switched out for another implementation by implementing the
+`UserResolverInterface` and binding this to the container in your `AppServiceProvider`. This needs
+to be during registration and not boot.
+
+Alternatively: the `UserResolver` may be switched out at run time by accessing the `AuditConfiguration`
+from the `AuditRegistry` for the entity manager and setting a new resolver instance:
+
+```php
+use Somnambulist\EntityAudit\AuditRegistry;
+
+$app->get(AuditRegistry::class)->get(/* $emName */)->getConfiguration()->setUserResolver($resolver);
+```
+
+If the entity manager name is not specified, the default will be chosen. Note that the configuration
+is shared with the `AuditReader`. It is recommended to set the UserResolver this way as early as
+possible and preferably before loading and modifying any entities to avoid issues with user resolution.
+
 ## Unit Tests
 
 The existing unit tests have been ported over excluding the Gedmo soft-deleteable.

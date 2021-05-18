@@ -38,21 +38,11 @@ use Somnambulist\EntityAudit\Support\TableConfiguration;
 class ServiceProvider extends BaseServiceProvider
 {
 
-    /**
-     * Perform post-registration booting of services.
-     *
-     * @return void
-     */
     public function boot()
     {
         $this->publishes([ $this->getConfigPath() => config_path('entity_audit.php'), ], 'config');
     }
 
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
     public function register()
     {
         $this->mergeConfig();
@@ -64,38 +54,31 @@ class ServiceProvider extends BaseServiceProvider
         $this->registerEntityAuditConfigurations($config);
     }
 
-
-
-    /**
-     * Merge config
-     */
     protected function mergeConfig()
     {
         $this->mergeConfigFrom($this->getConfigPath(), 'entity_audit');
     }
 
-    /**
-     * Registers the core Tenant services
-     *
-     * @param Repository $config
-     *
-     * @return void
-     */
     protected function registerCoreServices(Repository $config)
     {
         $this->app->singleton(AuditRegistry::class, function () {
             return new AuditRegistry();
         });
         $this->app->alias(AuditRegistry::class, 'entity_audit.registry');
+
+        if (!$this->app->has(UserResolverInterface::class)) {
+            $this->app->singleton(UserResolverInterface::class, function () use ($config) {
+                $users = $config->get('entity_audit.global.username_for');
+
+                return new UserResolver(
+                    $this->app->make(Guard::class),
+                    $users['unknown_authenticated_user'],
+                    $users['unknown_unauthenticated_user']
+                );
+            });
+        }
     }
 
-    /**
-     * Registers auditing to the specified entity managers
-     *
-     * @param Repository $config
-     *
-     * @return void
-     */
     protected function registerEntityAuditConfigurations(Repository $config)
     {
         $this->app->afterResolving(IlluminateRegistry::class, function ($registry) use ($config) {
@@ -108,11 +91,7 @@ class ServiceProvider extends BaseServiceProvider
                 $users       = array_merge($users, data_get($emConfig, 'username_for', []));
                 $metadata    = new MetadataFactory(data_get($emConfig, 'entities', []));
                 $auditConfig = new AuditConfiguration(
-                    new UserResolver(
-                        $this->app->make(Guard::class),
-                        $users['unknown_authenticated_user'],
-                        $users['unknown_unauthenticated_user']
-                    ),
+                    $this->app->make(UserResolverInterface::class),
                     new TableConfiguration(array_merge($table, data_get($emConfig, 'table', []))),
                     data_get($emConfig, 'ignore_columns', $columns)
                 );
@@ -133,17 +112,11 @@ class ServiceProvider extends BaseServiceProvider
         });
     }
 
-    /**
-     * @return string
-     */
     protected function getConfigPath()
     {
         return __DIR__ . '/../config/entity_audit.php';
     }
 
-    /**
-     * @return array
-     */
     public function provides()
     {
         return [

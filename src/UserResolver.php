@@ -31,7 +31,7 @@ use Somnambulist\Doctrine\Contracts\UniversallyIdentifiable;
  * @subpackage Somnambulist\EntityAudit\UserResolver
  * @author     Dave Redfern
  */
-class UserResolver
+class UserResolver implements UserResolverInterface
 {
 
     /**

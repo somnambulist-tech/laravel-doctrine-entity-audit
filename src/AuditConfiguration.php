@@ -37,7 +37,7 @@ class AuditConfiguration
 {
 
     /**
-     * @var UserResolver
+     * @var UserResolverInterface
      */
     private $userResolver;
 
@@ -56,18 +56,26 @@ class AuditConfiguration
     /**
      * Constructor.
      *
-     * @param UserResolver       $userResolver
-     * @param TableConfiguration $table
-     * @param array              $ignoreColumns
+     * @param UserResolverInterface $userResolver
+     * @param TableConfiguration    $table
+     * @param array                 $ignoreColumns
      */
     public function __construct(
-        UserResolver $userResolver,
+        UserResolverInterface $userResolver,
         TableConfiguration $table,
         $ignoreColumns
-    ) {
-        $this->userResolver         = $userResolver;
-        $this->tableConfig          = $table;
-        $this->globalIgnoreColumns  = $ignoreColumns;
+    )
+    {
+        $this->userResolver        = $userResolver;
+        $this->tableConfig         = $table;
+        $this->globalIgnoreColumns = $ignoreColumns;
+    }
+
+    public function setUserResolver(UserResolverInterface $userResolver)
+    {
+        $this->userResolver = $userResolver;
+
+        return $this;
     }
 
     /**

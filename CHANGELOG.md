@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2021-05-18
+----------
+
+Changed:
+
+ * Separated `UserResolver` into an interface with a default service implementation
+
 2021-05-03
 ----------
 
