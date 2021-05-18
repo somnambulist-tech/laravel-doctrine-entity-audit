@@ -7,6 +7,7 @@ Change Log
 Changed:
 
  * Separated `UserResolver` into an interface with a default service implementation
+ * Fixed type issue where `datetime` was hard-wired with date_create() in LogRevisionsListener
 
 2021-05-03
 ----------

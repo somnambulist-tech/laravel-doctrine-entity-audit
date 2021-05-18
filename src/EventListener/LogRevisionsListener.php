@@ -308,7 +308,7 @@ class LogRevisionsListener implements EventSubscriber
             $this->conn->insert(
                 $this->config->getRevisionTableName(),
                 [
-                    'timestamp' => date_create('now'),
+                    'timestamp' => Type::getType('datetime')->convertToPHPValue('now', $this->platform),
                     'username'  => $this->config->getCurrentUsername(),
                 ],
                 [
