@@ -151,6 +151,7 @@ class LogRevisionsListener implements EventSubscriber
                                 if ($definition['name'] == $field) {
                                     $targetTable = $em->getClassMetadata($mapping['targetEntity']);
                                     $type        = $targetTable->getTypeOfColumn($definition['referencedColumnName']);
+                                    $types[]     = $targetTable->getTypeOfColumn($definition['referencedColumnName']);
                                 }
                             }
                         }

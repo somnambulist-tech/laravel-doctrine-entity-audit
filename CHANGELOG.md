@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2021-05-19
+----------
+
+Changed:
+
+ * Fix for missing types on join columns as suggested by [@Rezaldy](https://github.com/Rezaldy)
+
 2021-05-18
 ----------
 
