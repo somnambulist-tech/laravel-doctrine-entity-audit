@@ -257,7 +257,7 @@ class AuditReader
                 throw new \RuntimeException('column name not found  for' . $idField);
             }
 
-            $whereSQL .= " AND e." . $columnName . " = ?";
+            $whereSQL .= " AND e." . $this->em->getConnection()->quoteIdentifier($columnName) . " = ?";
         }
 
         $columnList = ['e.' . $this->config->getRevisionTypeFieldName()];
@@ -273,7 +273,7 @@ class AuditReader
                 '%s.%s AS %s',
                 $tableAlias,
                 $type->convertToPHPValueSQL(
-                    $class->getColumnName($field),
+                    $this->em->getConnection()->quoteIdentifier($class->getColumnName($field)),
                     $this->platform
                 ),
                 $this->platform->quoteSingleIdentifier($field)

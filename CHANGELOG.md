@@ -1,6 +1,21 @@
 Change Log
 ==========
 
+2021-06-10
+----------
+
+Changed:
+
+ * Fix reserved SQL keywords as column names are not escaped when building auditing queries
+
+2021-06-03
+----------
+
+Changed:
+
+ * Fix memory leak in `LogRevisionsListener` not clearing tracked entities internal array
+ * Fix compound identity where clause in `LogRevisionsListener`
+
 2021-05-19
 ----------
 

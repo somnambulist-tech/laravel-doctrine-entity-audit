@@ -30,53 +30,58 @@ use Somnambulist\EntityAudit\Tests\Fixtures\Issue\DuplicateRevisionFailureTestPr
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\DuplicateRevisionFailureTestSecondaryOwner;
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\EscapedColumnsEntity;
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue156Client;
+use Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue156Contact;
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue156ContactTelephoneNumber;
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue31Reve;
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue31User;
+use Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87AbstractProject;
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87Organization;
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87Project;
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87ProjectComment;
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue9Address;
 use Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue9Customer;
+use Somnambulist\EntityAudit\Tests\Fixtures\Issue\IssueReservedSQLKeywordsAsColumnNames;
 
 class IssueTest extends BaseTest
 {
     protected $schemaEntities = [
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\EscapedColumnsEntity',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87Project',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87ProjectComment',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87AbstractProject',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87Organization',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue9Address',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue9Customer',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87Organization',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\DuplicateRevisionFailureTestPrimaryOwner',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\DuplicateRevisionFailureTestSecondaryOwner',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\DuplicateRevisionFailureTestOwnedElement',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue31User',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue31Reve',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue156Contact',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue156ContactTelephoneNumber',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue156Client',
+        EscapedColumnsEntity::class,
+        Issue87Project::class,
+        Issue87ProjectComment::class,
+        Issue87AbstractProject::class,
+        Issue87Organization::class,
+        Issue9Address::class,
+        Issue9Customer::class,
+        Issue87Organization::class,
+        DuplicateRevisionFailureTestPrimaryOwner::class,
+        DuplicateRevisionFailureTestSecondaryOwner::class,
+        DuplicateRevisionFailureTestOwnedElement::class,
+        Issue31User::class,
+        Issue31Reve::class,
+        Issue156Contact::class,
+        Issue156ContactTelephoneNumber::class,
+        Issue156Client::class,
+        IssueReservedSQLKeywordsAsColumnNames::class,
     ];
 
     protected $auditedEntities = [
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\EscapedColumnsEntity',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87Project',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87ProjectComment',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87AbstractProject',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87Organization',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue9Address',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue9Customer',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue87Organization',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\DuplicateRevisionFailureTestPrimaryOwner',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\DuplicateRevisionFailureTestSecondaryOwner',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\DuplicateRevisionFailureTestOwnedElement',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue31User',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue31Reve',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue156Contact',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue156ContactTelephoneNumber',
-        'Somnambulist\EntityAudit\Tests\Fixtures\Issue\Issue156Client',
+        EscapedColumnsEntity::class,
+        Issue87Project::class,
+        Issue87ProjectComment::class,
+        Issue87AbstractProject::class,
+        Issue87Organization::class,
+        Issue9Address::class,
+        Issue9Customer::class,
+        Issue87Organization::class,
+        DuplicateRevisionFailureTestPrimaryOwner::class,
+        DuplicateRevisionFailureTestSecondaryOwner::class,
+        DuplicateRevisionFailureTestOwnedElement::class,
+        Issue31User::class,
+        Issue31Reve::class,
+        Issue156Contact::class,
+        Issue156ContactTelephoneNumber::class,
+        Issue156Client::class,
+        IssueReservedSQLKeywordsAsColumnNames::class,
     ];
 
     public function testIssue31()
@@ -226,5 +231,19 @@ class IssueTest extends BaseTest
         $object      = $auditReader->find(get_class($number), $number->getId(), 1);
 
         $this->assertInstanceOf(get_class($number), $object);
+    }
+
+    public function testIssueReservedSQLKeywordsAsColumnNames()
+    {
+        $test = new IssueReservedSQLKeywordsAsColumnNames();
+        $test->setDefault('some default')->setOrder(23);
+
+        $this->em->persist($test);
+        $this->em->flush();
+
+        $auditReader = $this->auditManager->getAuditReader();
+        $object      = $auditReader->find(get_class($test), $test->getId(), 1);
+
+        $this->assertInstanceOf(get_class($test), $object);
     }
 }

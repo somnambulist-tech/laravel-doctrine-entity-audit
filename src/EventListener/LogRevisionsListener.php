@@ -132,7 +132,7 @@ class LogRevisionsListener implements EventSubscriber
 
             foreach ($updateData[$meta->table['name']] as $field => $value) {
                 $sql = 'UPDATE ' . $this->config->getTableName($meta) . ' ' .
-                       'SET ' . $field . ' = ? ' .
+                       'SET ' . $this->em->getConnection()->quoteIdentifier($field) . ' = ? ' .
                        'WHERE ' . $this->config->getRevisionFieldName() . ' = ? ';
 
                 $params = [$value, $this->getRevisionId()];
@@ -177,12 +177,15 @@ class LogRevisionsListener implements EventSubscriber
 
                     $params[] = $meta->reflFields[$idField]->getValue($entity);
 
-                    $sql .= 'AND ' . $columnName . ' = ?';
+                    //$sql .= ' AND ' . $this->em->getConnection()->quoteIdentifier($columnName) . ' = ?';
+                    $sql .= ' AND ' . $this->em->getConnection()->quoteIdentifier($columnName) . ' = ?';
                 }
 
                 $this->em->getConnection()->executeQuery($sql, $params, $types);
             }
         }
+
+        $this->extraUpdates = [];
     }
 
     /**
