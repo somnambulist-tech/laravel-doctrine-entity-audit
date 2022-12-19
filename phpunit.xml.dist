@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./tests/config/bootstrap.php" colors="true"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd">
     <coverage>
         <include>
             <directory>./src</directory>
@@ -15,6 +15,7 @@
         </testsuite>
     </testsuites>
     <php>
+        <ini name="error_reporting" value="E_ALL &amp; ~E_DEPRECATED"/>
         <var name="DOCTRINE_DRIVER" value="pdo_sqlite"/>
         <var name="DOCTRINE_MEMORY" value="1"/>
         <var name="DOCTRINE_DATABASE" value=""/>

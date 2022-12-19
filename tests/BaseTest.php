@@ -24,7 +24,6 @@
 namespace Somnambulist\EntityAudit\Tests;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\DBAL\Logging\EchoSQLLogger;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
@@ -75,8 +74,6 @@ abstract class BaseTest extends TestCase
         $driver = new AnnotationDriver($reader);
         $driver->addPaths([__DIR__ . '/Fixtures']);
         $config = new Configuration();
-        $config->setMetadataCacheImpl(new ArrayCache());
-        $config->setQueryCacheImpl(new ArrayCache());
         $config->setProxyDir(sys_get_temp_dir());
         $config->setProxyNamespace('Somnambulist\EntityAudit\Tests\Proxies');
         $config->setMetadataDriverImpl($driver);
@@ -104,7 +101,7 @@ abstract class BaseTest extends TestCase
         $this->em = EntityManager::create($conn, $config);
 
         $guard = $this->getMockBuilder(Guard::class)
-            ->setMethods(['user', 'check', 'guest', 'id', 'validate', 'setUser'])
+            ->onlyMethods(['user', 'check', 'guest', 'id', 'validate', 'setUser'])
             ->getMock()
         ;
         $guard
@@ -150,9 +147,7 @@ abstract class BaseTest extends TestCase
         $em         = $this->em;
 
         try {
-            $schemaTool->dropSchema(array_map(function ($value) use ($em) {
-                return $em->getClassMetadata($value);
-            }, $this->schemaEntities));
+            $schemaTool->dropDatabase();
         } catch (\Exception $e) {
             if ($GLOBALS['DOCTRINE_DRIVER'] != 'pdo_mysql' ||
                 !($e instanceof \PDOException && strpos($e->getMessage(), 'Base table or view already exists') !== false)

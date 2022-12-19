@@ -50,9 +50,6 @@ class CustomDateTimeTest extends BaseTest
         parent::setUp();
     }
 
-    /**
-     * @group cur
-     */
     public function testFind()
     {
         $user = new UserAudit("beberlei");
