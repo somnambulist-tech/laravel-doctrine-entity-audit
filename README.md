@@ -1,6 +1,6 @@
 # Entity Auditing for Doctrine in Laravel
 
-[![GitHub Actions Build Status](https://img.shields.io/github/workflow/status/somnambulist-tech/laravel-doctrine-entity-audit/tests?logo=github)](https://github.com/somnambulist-tech/laravel-doctrine-entity-audit/actions?query=workflow%3Atests)
+[![GitHub Actions Build Status](https://img.shields.io/github/actions/workflow/status/somnambulist-tech/laravel-doctrine-entity-audit/tests.yml?logo=github&branch=master)](https://github.com/somnambulist-tech/laravel-doctrine-entity-audit/actions?query=workflow%3Atests)
 [![Issues](https://img.shields.io/github/issues/somnambulist-tech/laravel-doctrine-entity-audit?logo=github)](https://github.com/somnambulist-tech/laravel-doctrine-entity-audit/issues)
 [![License](https://img.shields.io/github/license/somnambulist-tech/laravel-doctrine-entity-audit?logo=github)](https://github.com/somnambulist-tech/laravel-doctrine-entity-audit/blob/master/LICENSE)
 [![PHP Version](https://img.shields.io/packagist/php-v/somnambulist/laravel-doctrine-entity-audit?logo=php&logoColor=white)](https://packagist.org/packages/somnambulist/laravel-doctrine-entity-audit)
